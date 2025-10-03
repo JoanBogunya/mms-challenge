@@ -82,8 +82,6 @@ const IssuesListViewContent = () => {
         </Container>
     }
 
-    console.log('state: ', state);
-    console.log('searchTerm: ', searchTerm);
     return (
         <Container>
             <Card>
