@@ -21,3 +21,7 @@ body {
   display: flex;
   place-items: center;
 }
+
+a {
+  text-decoration: none;
+}

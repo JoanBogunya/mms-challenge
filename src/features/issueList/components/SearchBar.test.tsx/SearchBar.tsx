@@ -51,6 +51,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         <SearchContainer>
             <Search color={palette.border} />
             <SearchInput
+                name="Search issue"
                 type="text"
                 placeholder="Search issues"
                 value={query}

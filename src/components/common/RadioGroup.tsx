@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
-const RadioGroupContainer = styled.div`
+const RadioGroupContainer = styled.div.attrs({
+  role: 'radiogroup',
+})`
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -16,8 +17,10 @@ const RadioLabel = styled.label`
 `;
 
 const HiddenRadio = styled.input.attrs({ type: 'radio' })`
-  display: none;
-`;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;`;
 
 const CustomRadio = styled.span`
   width: 15px;
@@ -26,6 +29,11 @@ const CustomRadio = styled.span`
   border-radius: 50%;
   margin-right: 10px;
   position: relative;
+
+  ${RadioLabel}:focus-within & {
+    outline: 2px solid black;
+    outline-offset: 2px;
+  }
 
   ${HiddenRadio}:checked + &::after {
     content: '';
@@ -40,32 +48,33 @@ const CustomRadio = styled.span`
 `;
 
 interface RadioGroupProps {
-    options: { label: string, value: string }[];
-    name: string;
-    onChange: (value: string) => void;
+  options: { label: string, value: string }[];
+  selected: string;
+  name: string;
+  onChange: (value: string) => void;
 }
-export const RadioGroup = ({ options, name, onChange }: RadioGroupProps) => {
-    const [selected, setSelected] = useState('');
+export const RadioGroup = ({ options, name, onChange, selected }: RadioGroupProps) => {
 
-    const handleChange = (e: { target: { value: string; }; }) => {
-        setSelected(e.target.value);
-        onChange?.(e.target.value);
-    };
+  const handleChange = (e: { target: { value: string; }; }) => {
+    onChange?.(e.target.value);
+  };
 
-    return (
-        <RadioGroupContainer>
-            {options.map((option) => (
-                <RadioLabel key={option.value}>
-                    <HiddenRadio
-                        name={name}
-                        value={option.value}
-                        checked={selected === option.value}
-                        onChange={handleChange}
-                    />
-                    <CustomRadio />
-                    {option.label}
-                </RadioLabel>
-            ))}
-        </RadioGroupContainer>
-    );
+  return (
+    <RadioGroupContainer>
+      {options.map((option) => (
+        <RadioLabel key={option.value}>
+          <HiddenRadio
+            id={`${name}-${option.value}`}
+            aria-label={option.label}
+            name={name}
+            value={option.value}
+            checked={selected === option.value}
+            onChange={handleChange}
+          />
+          <CustomRadio aria-hidden="true" />
+          {option.label}
+        </RadioLabel>
+      ))}
+    </RadioGroupContainer>
+  );
 };

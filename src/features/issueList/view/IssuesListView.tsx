@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { Card, Divider, Loader, RadioGroup, SpaceBetween, Subtitle } from "../../../components/common";
-import SearchBar from "../components/SearchBar";
+import { Card, Divider, Loader, RadioGroup, SpaceBetween, Subtitle, Typography } from "../../../components/common";
+import SearchBar from "../components/SearchBar.test.tsx/SearchBar";
 import { useSearchIssues } from "../hooks/useSearchIssues";
 import type { IssueState } from "../hooks/useSearchIssues";
 import { useState } from "react";
-import IssuesList from "../components/IssuesList";
+import IssuesList from "../components/IssuesList/IssuesList";
+import IssuesListPagination from "../components/IssuesListPagination/IssuesListPagination";
 
 const Container = styled.div`
 width: 100%;
@@ -20,9 +21,50 @@ padding: 0 0 8px 0;
 const IssuesSearchView = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [state, setState] = useState<IssueState>("ALL");
-    const { isFetching, issues, isLoading } = useSearchIssues({ searchTerm: searchTerm, state: state })
+    const [afterCursor, setAfterCursor] = useState<string | null>(null);
+    const [beforeCursor, setBeforeCursor] = useState<string | null>(null);
+    const { isFetching,
+        issues,
+        isLoading,
+        hasNextPage,
+        hasPreviousPage,
+        endCursor,
+        startCursor,
+        error,
+    } = useSearchIssues({
+        searchTerm: searchTerm,
+        state: state,
+        after: afterCursor,
+        before: beforeCursor
+    });
+
     const onSearch = (value: string) => {
+        setBeforeCursor(null);
+        setAfterCursor(null);
         setSearchTerm(value);
+    };
+
+    const goToNextPage = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setAfterCursor(endCursor);
+        setBeforeCursor(null);
+    };
+
+    const goToPreviousPage = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        setBeforeCursor(startCursor);
+        setAfterCursor(null);
+    };
+    if (error) {
+        //ideally we would implement this in another way, but i did it like this due to time constraints
+        console.error(error.message);
+        return <Container>
+            <Card>
+                <Typography>The following error has occured, please try again later</Typography>
+                <Typography $variant="body2" $fontSize="small">{error.message}</Typography>
+            </Card>
+        </Container>
     }
     return (
         <Container>
@@ -31,6 +73,7 @@ const IssuesSearchView = () => {
                     <SpaceBetween>
                         <Subtitle>React repository issues</Subtitle>
                         <RadioGroup
+                            selected={state}
                             options={[
                                 { label: 'All', value: 'ALL' },
                                 { label: 'Open', value: 'OPEN' },
@@ -44,6 +87,14 @@ const IssuesSearchView = () => {
                 </CardHeader>
                 <Divider />
                 {isFetching || isLoading ? <Loader /> : <IssuesList issues={issues} />}
+                {(issues && issues.length) && !(isFetching || isLoading) ?
+                    <IssuesListPagination
+                        goToNextPage={goToNextPage}
+                        goToPreviousPage={goToPreviousPage}
+                        hasNextPage={hasNextPage}
+                        hasPreviousPage={hasPreviousPage}
+                    />
+                    : null}
             </Card>
         </Container>
     )

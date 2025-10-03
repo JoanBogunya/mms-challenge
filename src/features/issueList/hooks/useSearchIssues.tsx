@@ -25,7 +25,9 @@ export interface Issue {
 
 interface PageInfo {
     endCursor: string | null;
+    startCursor: string | null;
     hasNextPage: boolean;
+    hasPreviousPage: boolean;
 }
 
 interface SearchIssuesData {
@@ -40,32 +42,37 @@ interface SearchIssuesData {
 
 interface SearchIssuesVars {
     query: string;
-    first: number;
-    after?: string;
+    first: number | null;
+    last: number | null;
+    after: string | null;
+    before: string | null;
 }
 
 interface SearchIssuesProps {
     searchTerm: string;
     state: IssueState;
-    after?: string;
+    after: string | null;
+    before: string | null;
 }
 
 interface SearchIssuesProps {
     searchTerm: string,
     state: IssueState,
-    after?: string
+    after: string | null;
+    before: string | null;
 }
 
 export const useSearchIssues = ({
     searchTerm,
     state,
-    after
+    after,
+    before
 }: SearchIssuesProps) => {
     const stateFilter = state === 'ALL' ? '' : `is:${state.toLowerCase()}`;
     const query = `repo:facebook/react is:issue ${stateFilter} in:title,body ${searchTerm}`;
 
-    const { data, loading, error, fetchMore, networkStatus }: useQuery.Result<SearchIssuesData, SearchIssuesVars> = useQuery(SEARCH_ISSUES, {
-        variables: { query, first: 20, after },
+    const { data, loading, error, fetchMore, networkStatus, refetch }: useQuery.Result<SearchIssuesData, SearchIssuesVars> = useQuery(SEARCH_ISSUES, {
+        variables: { query, first: !before ? 20 : null, last: !after && before ? 20 : null, after, before },
         notifyOnNetworkStatusChange: true,
     });
 
@@ -79,7 +86,10 @@ export const useSearchIssues = ({
         issues,
         issueCount,
         hasNextPage: pageInfo.hasNextPage ?? false,
+        hasPreviousPage: pageInfo.hasPreviousPage ?? false,
+        startCursor: pageInfo.startCursor ?? null,
         endCursor: pageInfo.endCursor ?? null,
         fetchMore,
+        refetch
     };
 };
