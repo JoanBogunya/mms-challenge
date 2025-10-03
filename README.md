@@ -9,6 +9,8 @@ The app demonstrates searching and viewing GitHub issues with pagination and det
 
 ## How to run the application
 
+If you do not want to set up a .env file and just want to check how the application works you can do so [Here](https://mms-challenge.vercel.app)
+
 ### 1. **Clone the repository**
 
 ```bash
