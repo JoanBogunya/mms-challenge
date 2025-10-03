@@ -15,7 +15,7 @@ export const GET_ISSUE_DETAILS = gql`
             name
           }
         }
-        comments(first: 1, after: $commentsAfter) {
+        comments(first: 10, after: $commentsAfter) {
           nodes {
             author {
               login

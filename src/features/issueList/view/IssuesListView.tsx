@@ -3,9 +3,11 @@ import { Card, Divider, Loader, RadioGroup, SpaceBetween, Subtitle, Typography }
 import SearchBar from "../components/SearchBar.test.tsx/SearchBar";
 import { useSearchIssues } from "../hooks/useSearchIssues";
 import type { IssueState } from "../hooks/useSearchIssues";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IssuesList from "../components/IssuesList/IssuesList";
 import IssuesListPagination from "../components/IssuesListPagination/IssuesListPagination";
+import { SearchProvider } from "../context/SearchProvider";
+import { useSearchContext } from "../context/SearchContext";
 
 const Container = styled.div`
 width: 100%;
@@ -18,9 +20,14 @@ const CardHeader = styled.div`
 padding: 0 0 8px 0;
 `
 
-const IssuesSearchView = () => {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [state, setState] = useState<IssueState>("ALL");
+const IssuesListView = () => {
+    return <SearchProvider>
+        <IssuesListViewContent />
+    </SearchProvider>
+}
+
+const IssuesListViewContent = () => {
+    const { searchTerm, setSearchTerm, state, setState } = useSearchContext();
     const [afterCursor, setAfterCursor] = useState<string | null>(null);
     const [beforeCursor, setBeforeCursor] = useState<string | null>(null);
     const { isFetching,
@@ -37,6 +44,12 @@ const IssuesSearchView = () => {
         after: afterCursor,
         before: beforeCursor
     });
+
+    useEffect(() => {
+        setAfterCursor(null);
+        setBeforeCursor(null);
+    }, [searchTerm, state]);
+
 
     const onSearch = (value: string) => {
         setBeforeCursor(null);
@@ -82,7 +95,7 @@ const IssuesSearchView = () => {
                             name="Issue state"
                             onChange={(value) => setState(value as IssueState)}
                         />
-                        <SearchBar onSearch={onSearch} />
+                        <SearchBar value={searchTerm} onSearch={onSearch} />
                     </SpaceBetween>
                 </CardHeader>
                 <Divider />
@@ -100,4 +113,4 @@ const IssuesSearchView = () => {
     )
 };
 
-export default IssuesSearchView
+export default IssuesListView

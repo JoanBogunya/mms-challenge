@@ -8,7 +8,7 @@ describe('SearchBar', () => {
     it('renders properly', () => {
         render(
             <ThemeProvider theme={theme}>
-                <SearchBar onSearch={() => { }} />
+                <SearchBar value="" onSearch={() => { }} />
             </ThemeProvider>
         );
         expect(screen.getByRole('textbox')).toBeInTheDocument();

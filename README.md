@@ -1,75 +1,91 @@
-# React + TypeScript + Vite
+# MediaMarktSaturn Tech Challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a technical challenge for **MediaMarktSaturn** developed by **Joan Bogunyà**.
 
-Currently, two official plugins are available:
+It is a React application using TypeScript, Apollo Client, GraphQL, Styled Components, and Vitest for testing.  
+The app demonstrates searching and viewing GitHub issues with pagination and detail views.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## How to run the application
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+### 1. **Clone the repository**
 
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone <your-repo-url>
+cd mms-challenge
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 2. **Install dependencies**
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+---
+
+### 3. **Set up environment variables**
+
+Create a `.env` file in the root directory with the following content:
+
+```
+VITE_GITHUB_TOKEN=your_github_personal_access_token
+```
+
+- You need a [GitHub personal access token](https://github.com/settings/tokens) with `public_repo` access.
+- This is required for the GitHub GraphQL API.
+
+---
+
+### 4. **Run the app**
+
+```bash
+npm run dev
+```
+
+- The app will be available at [http://localhost:3000](http://localhost:3000) (or the port shown in your terminal).
+
+---
+
+### 5. **Run tests**
+
+```bash
+npm run test
+```
+
+- Runs all unit tests using Vitest.
+
+---
+
+## Tech Stack
+
+- **React** + **TypeScript**
+- **Apollo Client** (GraphQL)
+- **Styled Components**
+- **React Router**
+- **Vitest** + **Testing Library** (unit tests)
+
+---
+
+## Project Structure
+
+```
+src/
+  components/      # Reusable UI components
+  config/          # Theme and constants
+  features/        # Feature modules
+  graphql/         # Apollo client setup
+  routes/          # App routing
+  main.tsx         # App entry point
+```
+
+---
+
+## Notes
+
+- While accessibility is a priority in production code, due to time constraints for this challenge, some accessibility best practices (such as full keyboard navigation, ARIA attributes, and screen reader support) could not be fully implemented.
+- This project is for evaluation purposes only.
+
+---

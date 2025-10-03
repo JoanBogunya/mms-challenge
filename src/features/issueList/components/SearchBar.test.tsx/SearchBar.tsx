@@ -26,10 +26,11 @@ const SearchInput = styled.input`
 
 interface SearchBarProps {
     onSearch: (value: string) => void;
+    value: string
 }
 
-const SearchBar = ({ onSearch }: SearchBarProps) => {
-    const [query, setQuery] = useState('');
+const SearchBar = ({ onSearch, value }: SearchBarProps) => {
+    const [query, setQuery] = useState(value);
     const [debouncedQuery, setDebouncedQuery] = useState(query);
     const { palette } = useTheme();
 
@@ -46,6 +47,10 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     useEffect(() => {
         if (onSearch) onSearch(debouncedQuery);
     }, [debouncedQuery, onSearch]);
+
+    useEffect(() => {
+        setQuery(value);
+    }, [value]);
 
     return (
         <SearchContainer>
