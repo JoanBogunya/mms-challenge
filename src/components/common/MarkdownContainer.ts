@@ -20,7 +20,9 @@ height: auto;
 &>pre:has(code) {
 padding: 4px;
 background-color: rgba(90, 90, 90, 1);
-color: white;}
+color: white;
+overflow: auto;
+}
 `;
 
 export default MarkdownContainer;

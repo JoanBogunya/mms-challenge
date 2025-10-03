@@ -45,6 +45,8 @@ const IssuesListViewContent = () => {
         before: beforeCursor
     });
 
+
+
     useEffect(() => {
         setAfterCursor(null);
         setBeforeCursor(null);
@@ -79,6 +81,9 @@ const IssuesListViewContent = () => {
             </Card>
         </Container>
     }
+
+    console.log('state: ', state);
+    console.log('searchTerm: ', searchTerm);
     return (
         <Container>
             <Card>

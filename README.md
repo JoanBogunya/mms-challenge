@@ -86,6 +86,7 @@ src/
 ## Notes
 
 - While accessibility is a priority in production code, due to time constraints for this challenge, some accessibility best practices (such as full keyboard navigation, ARIA attributes, and screen reader support) could not be fully implemented.
+- Absolute pathing has also not been implemented due to time constraints.
 - This project is for evaluation purposes only.
 
 ---
